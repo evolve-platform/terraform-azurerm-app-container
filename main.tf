@@ -88,10 +88,29 @@ resource "azurerm_container_app" "this" {
     }
   }
 
+  dynamic "registry" {
+    for_each = var.registry_username != "" && var.registry_password != "" ? [] : [1]
+    content {
+      server   = split("/", var.image)[0]
+      identity = var.identity_id
+    }
+  }
 
-  registry {
-    server   = split("/", var.image)[0]
-    identity = var.identity_id
+  dynamic "secret" {
+    for_each = var.registry_username != "" && var.registry_password != "" ? [1] : []
+    content {
+      name  = "registry-password"
+      value = var.registry_password
+    }
+  }
+
+  dynamic "registry" {
+    for_each = var.registry_username != "" && var.registry_password != "" ? [1] : []
+    content {
+      server               = split("/", var.image)[0]
+      username             = var.registry_username
+      password_secret_name = "registry-password"
+    }
   }
 
   ingress {

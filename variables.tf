@@ -33,8 +33,20 @@ variable "proxy_image" {
 }
 
 variable "identity_id" {
-  description = "The identity to be used for the container"
+  description = "The identity to be used for the container registry"
   type        = string
+}
+
+variable "registry_username" {
+  description = "The username to be used for the container registry"
+  type        = string
+  default     = ""
+}
+
+variable "registry_password" {
+  description = "The name of the secret to be used for the container registry password"
+  type        = string
+  default     = ""
 }
 
 variable "container_app_environment_id" {
