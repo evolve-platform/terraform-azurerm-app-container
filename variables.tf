@@ -114,6 +114,7 @@ variable "container_additional_ports" {
 variable "healthcheck" {
   type = object({
     path                = string
+    port                = optional(number, null) # Optional port, defaults to container_port
     unhealthy_threshold = number
     timeout             = number
     interval            = number
@@ -157,8 +158,8 @@ EOT
       secret_name = string
     }))
     healthcheck = object({
-      path = string
-
+      path                = string
+      port                = optional(number, null) # Optional port, defaults to container_port
       unhealthy_threshold = number
       timeout             = number
       interval            = number
