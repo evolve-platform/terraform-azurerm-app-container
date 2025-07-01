@@ -29,7 +29,7 @@ variable "image" {
 variable "proxy_image" {
   type        = string
   default     = ""
-  description = "Version of the reverse proxy to deploy"
+  description = "Version of the reverse proxy to deploy (DEPRECATED: use side_containers instead)"
 }
 
 variable "identity_id" {
@@ -132,3 +132,38 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "side_containers" {
+  description = <<EOT
+List of side containers to run alongside the main container.
+Each object should have the same options as the main container:
+  - name
+  - image
+  - cpu
+  - memory
+  - env_vars (map)
+  - secrets (list of { env_name, secret_name })
+  - healthcheck (object: path, unhealthy_threshold, timeout, interval)
+  - container_port (number)
+EOT
+  type = list(object({
+    name     = string
+    image    = string
+    cpu      = number
+    memory   = string
+    env_vars = map(string)
+    secrets = list(object({
+      env_name    = string
+      secret_name = string
+    }))
+    healthcheck = object({
+      path                = string
+      unhealthy_threshold = number
+      timeout             = number
+      interval            = number
+    })
+    container_port = number
+  }))
+  default = []
+}
+

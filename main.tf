@@ -52,7 +52,44 @@ resource "azurerm_container_app" "this" {
       }
     }
 
-    # Reverse proxy container
+    # Side containers
+    dynamic "container" {
+      for_each = var.side_containers
+      content {
+        name   = container.value.name
+        image  = container.value.image
+        cpu    = container.value.cpu
+        memory = container.value.memory
+
+        readiness_probe {
+          path                    = container.value.healthcheck.path
+          port                    = container.value.container_port
+          success_count_threshold = 1
+          failure_count_threshold = container.value.healthcheck.unhealthy_threshold
+          interval_seconds        = container.value.healthcheck.interval
+          timeout                 = container.value.healthcheck.timeout
+          transport               = "HTTP"
+        }
+
+        dynamic "env" {
+          for_each = container.value.env_vars
+          content {
+            name  = env.key
+            value = env.value
+          }
+        }
+
+        dynamic "env" {
+          for_each = container.value.secrets
+          content {
+            name        = env.value.env_name
+            secret_name = env.value.secret_name
+          }
+        }
+      }
+    }
+
+    # Reverse proxy container (DEPRECATED: use side_containers instead)
     dynamic "container" {
       for_each = var.proxy_image != "" ? [var.proxy_image] : []
       content {
