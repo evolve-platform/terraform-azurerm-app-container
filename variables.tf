@@ -29,7 +29,7 @@ variable "image" {
 variable "proxy_image" {
   type        = string
   default     = ""
-  description = "Version of the reverse proxy to deploy (DEPRECATED: use side_containers instead)"
+  description = "Version of the reverse proxy to deploy"
 }
 
 variable "identity_id" {

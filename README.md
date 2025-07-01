@@ -40,7 +40,7 @@ No modules.
 | <a name="input_memory"></a> [memory](#input\_memory) | The memory to be used for the container | `string` | `"0.5Gi"` | no |
 | <a name="input_min_replicas"></a> [min\_replicas](#input\_min\_replicas) | The minimum number of instances to run | `number` | `0` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the container | `string` | n/a | yes |
-| <a name="input_proxy_image"></a> [proxy\_image](#input\_proxy\_image) | Version of the reverse proxy to deploy (DEPRECATED: use side\_containers instead) | `string` | `""` | no |
+| <a name="input_proxy_image"></a> [proxy\_image](#input\_proxy\_image) | Version of the reverse proxy to deploy | `string` | `""` | no |
 | <a name="input_registry_password"></a> [registry\_password](#input\_registry\_password) | The name of the secret to be used for the container registry password | `string` | `""` | no |
 | <a name="input_registry_username"></a> [registry\_username](#input\_registry\_username) | The username to be used for the container registry | `string` | `""` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The resource group to be used for the container | `string` | n/a | yes |

@@ -87,7 +87,6 @@ resource "azurerm_container_app" "this" {
       }
     }
 
-    # Reverse proxy container (DEPRECATED: use side_containers instead)
     dynamic "container" {
       for_each = var.proxy_image != "" ? [var.proxy_image] : []
       content {
