@@ -25,8 +25,7 @@ resource "azurerm_container_app" "this" {
 
       readiness_probe {
         path                    = var.healthcheck.path # Checks for status code 200 - 399
-        port                    = var.container_port
-        success_count_threshold = 1
+        port                    = var.healthcheck.port != null ? var.healthcheck.port : var.container_port
         failure_count_threshold = var.healthcheck.unhealthy_threshold
         interval_seconds        = var.healthcheck.interval
         timeout                 = var.healthcheck.timeout
@@ -63,8 +62,7 @@ resource "azurerm_container_app" "this" {
 
         readiness_probe {
           path                    = container.value.healthcheck.path
-          port                    = container.value.container_port
-          success_count_threshold = 1
+          port                    = container.value.healthcheck.port != null ? container.value.healthcheck.port : container.value.container_port
           failure_count_threshold = container.value.healthcheck.unhealthy_threshold
           interval_seconds        = container.value.healthcheck.interval
           timeout                 = container.value.healthcheck.timeout
@@ -104,7 +102,7 @@ resource "azurerm_container_app" "this" {
         readiness_probe {
           port                    = 8080
           path                    = var.healthcheck.path # Checks for status code 200 - 399
-          success_count_threshold = 1
+          success_count_threshold = var.healthcheck.healthy_threshold
           failure_count_threshold = var.healthcheck.unhealthy_threshold
           interval_seconds        = var.healthcheck.interval
           timeout                 = var.healthcheck.timeout
@@ -162,3 +160,4 @@ resource "azurerm_container_app" "this" {
     }
   }
 }
+

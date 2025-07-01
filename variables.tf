@@ -157,7 +157,8 @@ EOT
       secret_name = string
     }))
     healthcheck = object({
-      path                = string
+      path = string
+
       unhealthy_threshold = number
       timeout             = number
       interval            = number
