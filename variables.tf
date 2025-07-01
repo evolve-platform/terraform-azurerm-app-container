@@ -17,8 +17,8 @@ variable "memory" {
 
 variable "env_vars" {
   description = "Environment variables to be set in the container"
-  type        = map(string)
-  default     = {}
+  type = map(string)
+  default = {}
 }
 
 variable "image" {
@@ -28,7 +28,7 @@ variable "image" {
 
 variable "proxy_image" {
   type        = string
-  default     = ""
+  nullable    = true
   description = "Version of the reverse proxy to deploy"
 }
 
@@ -98,7 +98,6 @@ variable "container_port" {
   default     = 4000
 }
 
-
 # Not working currently, see:
 # https://github.com/hashicorp/terraform-provider-azurerm/issues/26565
 variable "container_additional_ports" {
@@ -113,12 +112,12 @@ variable "container_additional_ports" {
 
 variable "healthcheck" {
   type = object({
-    path                = string
+    path = string
     unhealthy_threshold = optional(number, 3)
-    healthy_threshold   = optional(number, 1)
-    timeout             = optional(number, 5)
-    interval            = optional(number, 60)
-    initial_delay       = optional(number, 60)
+    healthy_threshold = optional(number, 1)
+    timeout = optional(number, 5)
+    interval = optional(number, 60)
+    initial_delay = optional(number, 60)
   })
   nullable    = true
   default     = null
@@ -127,11 +126,11 @@ variable "healthcheck" {
 
 variable "healthcheck_liveness" {
   type = object({
-    path                = string
+    path = string
     unhealthy_threshold = optional(number, 3)
-    timeout             = optional(number, 2)
-    interval            = optional(number, 10)
-    initial_delay       = optional(number, 30)
+    timeout = optional(number, 2)
+    interval = optional(number, 10)
+    initial_delay = optional(number, 30)
   })
   nullable    = true
   default     = null
@@ -140,11 +139,11 @@ variable "healthcheck_liveness" {
 
 variable "healthcheck_startup" {
   type = object({
-    path                = string
+    path = string
     unhealthy_threshold = optional(number, 30)
-    timeout             = optional(number, 2)
-    interval            = optional(number, 10)
-    initial_delay       = optional(number, 0)
+    timeout = optional(number, 2)
+    interval = optional(number, 10)
+    initial_delay = optional(number, 0)
   })
   nullable    = true
   default     = null
@@ -153,8 +152,8 @@ variable "healthcheck_startup" {
 
 variable "tags" {
   description = "Tags to be set on the container"
-  type        = map(string)
-  default     = {}
+  type = map(string)
+  default = {}
 }
 
 variable "http_scale_rule" {
@@ -173,7 +172,7 @@ variable "cpu_scale_rule" {
   description = "CPU scale rules to be set on the container"
   type = object({
     threshold = optional(number, 50)
-    type      = optional(string, "Utilization")
+    type = optional(string, "Utilization")
   })
   nullable = true
   default = {
@@ -186,7 +185,7 @@ variable "memory_scale_rule" {
   description = "Memory scale rules to be set on the container"
   type = object({
     threshold = optional(number, 75)
-    type      = optional(string, "Utilization")
+    type = optional(string, "Utilization")
   })
   nullable = true
   default = {
@@ -195,3 +194,40 @@ variable "memory_scale_rule" {
   }
 }
 
+variable "sidecars" {
+  description = "List of side containers to run alongside the main container."
+  type = list(object({
+    name           = string
+    container_port = number
+    image          = string
+    cpu            = number
+    memory         = string
+    env_vars = map(string)
+    secrets = list(object({
+      env_name    = string
+      secret_name = string
+    }))
+    healthcheck = optional(object({
+      path = string
+      unhealthy_threshold = optional(number, 3)
+      timeout = optional(number, 5)
+      interval = optional(number, 60)
+      initial_delay = optional(number, 60)
+    }), null)
+    healthcheck_liveness = optional(object({
+      path = string
+      unhealthy_threshold = optional(number, 3)
+      timeout = optional(number, 2)
+      interval = optional(number, 10)
+      initial_delay = optional(number, 30)
+    }), null)
+    healthcheck_startup = optional(object({
+      path = string
+      unhealthy_threshold = optional(number, 30)
+      timeout = optional(number, 2)
+      interval = optional(number, 10)
+      initial_delay = optional(number, 0)
+    }), null)
+  }))
+  default = []
+}
