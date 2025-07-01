@@ -28,7 +28,7 @@ variable "image" {
 
 variable "proxy_image" {
   type        = string
-  default     = ""
+  nullable    = true
   description = "Version of the reverse proxy to deploy"
 }
 
@@ -97,7 +97,6 @@ variable "container_port" {
   type        = number
   default     = 4000
 }
-
 
 # Not working currently, see:
 # https://github.com/hashicorp/terraform-provider-azurerm/issues/26565
@@ -195,3 +194,40 @@ variable "memory_scale_rule" {
   }
 }
 
+variable "sidecars" {
+  description = "List of side containers to run alongside the main container."
+  type = list(object({
+    name           = string
+    container_port = number
+    image          = string
+    cpu            = number
+    memory         = string
+    env_vars       = map(string)
+    secrets = list(object({
+      env_name    = string
+      secret_name = string
+    }))
+    healthcheck = optional(object({
+      path                = string
+      unhealthy_threshold = optional(number, 3)
+      timeout             = optional(number, 5)
+      interval            = optional(number, 60)
+      initial_delay       = optional(number, 60)
+    }), null)
+    healthcheck_liveness = optional(object({
+      path                = string
+      unhealthy_threshold = optional(number, 3)
+      timeout             = optional(number, 2)
+      interval            = optional(number, 10)
+      initial_delay       = optional(number, 30)
+    }), null)
+    healthcheck_startup = optional(object({
+      path                = string
+      unhealthy_threshold = optional(number, 30)
+      timeout             = optional(number, 2)
+      interval            = optional(number, 10)
+      initial_delay       = optional(number, 0)
+    }), null)
+  }))
+  default = []
+}
