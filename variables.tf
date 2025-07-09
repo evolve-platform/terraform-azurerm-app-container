@@ -126,7 +126,9 @@ variable "healthcheck" {
     unhealthy_threshold = 3
     timeout             = 2
     interval            = 5
-    initial_delay       = 10
+    initial_delay_liveness  = 15
+    initial_delay_readiness = 30
+    initial_delay_startup   = 10
   }
   description = "Healthcheck configuration"
 }
