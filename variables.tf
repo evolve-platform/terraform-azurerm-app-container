@@ -117,7 +117,9 @@ variable "healthcheck" {
     unhealthy_threshold = number
     timeout             = number
     interval            = number
-    initial_delay       = number
+    initial_delay_liveness       = number
+    initial_delay_readiness      = number
+    initial_delay_startup        = number
   })
   default = {
     path                = "/"

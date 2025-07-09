@@ -31,7 +31,7 @@ resource "azurerm_container_app" "this" {
         interval_seconds        = var.healthcheck.interval
         timeout                 = var.healthcheck.timeout
         transport               = "HTTP"
-        initial_delay           = var.healthcheck.initial_delay
+        initial_delay           = var.healthcheck.initial_delay_readiness
       }
 
       liveness_probe {
@@ -41,7 +41,7 @@ resource "azurerm_container_app" "this" {
         interval_seconds        = var.healthcheck.interval
         timeout                 = var.healthcheck.timeout
         transport               = "HTTP"
-        initial_delay           = var.healthcheck.initial_delay
+        initial_delay           = var.healthcheck.initial_delay_liveness
       }
 
       startup_probe {
@@ -51,7 +51,7 @@ resource "azurerm_container_app" "this" {
         interval_seconds        = var.healthcheck.interval
         timeout                 = var.healthcheck.timeout
         transport               = "HTTP"
-        initial_delay           = var.healthcheck.initial_delay
+        initial_delay           = var.healthcheck.initial_delay_startup
       }
 
       dynamic "env" {
