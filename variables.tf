@@ -122,10 +122,10 @@ variable "healthcheck" {
     initial_delay_startup   = number
   })
   default = {
-    path                = "/"
-    unhealthy_threshold = 3
-    timeout             = 2
-    interval            = 5
+    path                    = "/"
+    unhealthy_threshold     = 3
+    timeout                 = 2
+    interval                = 5
     initial_delay_liveness  = 15
     initial_delay_readiness = 30
     initial_delay_startup   = 10
