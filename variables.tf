@@ -111,26 +111,58 @@ variable "container_additional_ports" {
   default = []
 }
 
-variable "healthcheck" {
+variable "healthcheck_readiness" {
   type = object({
-    path                    = string
-    unhealthy_threshold     = number
-    timeout                 = number
-    interval                = number
-    initial_delay_liveness  = number
-    initial_delay_readiness = number
-    initial_delay_startup   = number
+    path                = string
+    unhealthy_threshold = number
+    timeout             = number
+    interval            = number
+    initial_delay       = number
   })
   default = {
-    path                    = "/"
-    unhealthy_threshold     = 3
-    timeout                 = 2
-    interval                = 5
-    initial_delay_liveness  = 15
-    initial_delay_readiness = 30
-    initial_delay_startup   = 10
+    path                = "/"
+    unhealthy_threshold = 3
+    timeout             = 2
+    interval            = 5
+    initial_delay       = 30
   }
-  description = "Healthcheck configuration"
+  description = "Healthcheck Readiness configuration"
+}
+
+variable "healthcheck_liveness" {
+  type = object({
+    path                = string
+    unhealthy_threshold = number
+    timeout             = number
+    interval            = number
+    initial_delay       = number
+  })
+  default = {
+    path                = "/"
+    unhealthy_threshold = 3
+    timeout             = 2
+    interval            = 5
+    initial_delay       = 30
+  }
+  description = "Healthcheck Liveliness configuration"
+}
+
+variable "healthcheck_startup" {
+  type = object({
+    path                = string
+    unhealthy_threshold = number
+    timeout             = number
+    interval            = number
+    initial_delay       = number
+  })
+  default = {
+    path                = "/"
+    unhealthy_threshold = 3
+    timeout             = 2
+    interval            = 5
+    initial_delay       = 10
+  }
+  description = "Healthcheck startup configuration"
 }
 
 variable "tags" {

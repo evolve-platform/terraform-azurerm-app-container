@@ -24,24 +24,24 @@ resource "azurerm_container_app" "this" {
       memory = var.memory
 
       readiness_probe {
-        path                    = var.healthcheck.path # Checks for status code 200 - 399
+        path                    = var.healthcheck_readiness.path # Checks for status code 200 - 399
         port                    = var.container_port
         success_count_threshold = 1
-        failure_count_threshold = var.healthcheck.unhealthy_threshold
-        interval_seconds        = var.healthcheck.interval
-        timeout                 = var.healthcheck.timeout
+        failure_count_threshold = var.healthcheck_readiness.unhealthy_threshold
+        interval_seconds        = var.healthcheck_readiness.interval
+        timeout                 = var.healthcheck_readiness.timeout
         transport               = "HTTP"
-        initial_delay           = var.healthcheck.initial_delay_readiness
+        initial_delay           = var.healthcheck_readiness.initial_delay
       }
 
       liveness_probe {
-        path                    = var.healthcheck.path # Checks for status code 200 - 399
+        path                    = var.healthcheck_liveness.path # Checks for status code 200 - 399
         port                    = var.container_port
-        failure_count_threshold = var.healthcheck.unhealthy_threshold
-        interval_seconds        = var.healthcheck.interval
-        timeout                 = var.healthcheck.timeout
+        failure_count_threshold = var.healthcheck_liveness.unhealthy_threshold
+        interval_seconds        = var.healthcheck_liveness.interval
+        timeout                 = var.healthcheck_liveness.timeout
         transport               = "HTTP"
-        initial_delay           = var.healthcheck.initial_delay_liveness
+        initial_delay           = var.healthcheck_liveness.initial_delay
       }
 
       startup_probe {
@@ -51,7 +51,7 @@ resource "azurerm_container_app" "this" {
         interval_seconds        = var.healthcheck.interval
         timeout                 = var.healthcheck.timeout
         transport               = "HTTP"
-        initial_delay           = var.healthcheck.initial_delay_startup
+        initial_delay           = var.healthcheck.initial_delay
       }
 
       dynamic "env" {
