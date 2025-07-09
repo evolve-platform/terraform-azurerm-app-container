@@ -113,13 +113,13 @@ variable "container_additional_ports" {
 
 variable "healthcheck" {
   type = object({
-    path                = string
-    unhealthy_threshold = number
-    timeout             = number
-    interval            = number
-    initial_delay_liveness       = number
-    initial_delay_readiness      = number
-    initial_delay_startup        = number
+    path                    = string
+    unhealthy_threshold     = number
+    timeout                 = number
+    interval                = number
+    initial_delay_liveness  = number
+    initial_delay_readiness = number
+    initial_delay_startup   = number
   })
   default = {
     path                = "/"
