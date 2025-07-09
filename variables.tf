@@ -117,12 +117,14 @@ variable "healthcheck" {
     unhealthy_threshold = number
     timeout             = number
     interval            = number
+    initial_delay       = number
   })
   default = {
     path                = "/"
     unhealthy_threshold = 3
     timeout             = 2
     interval            = 5
+    initial_delay       = 10
   }
   description = "Healthcheck configuration"
 }
