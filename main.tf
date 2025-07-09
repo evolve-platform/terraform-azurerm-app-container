@@ -31,6 +31,27 @@ resource "azurerm_container_app" "this" {
         interval_seconds        = var.healthcheck.interval
         timeout                 = var.healthcheck.timeout
         transport               = "HTTP"
+        initial_delay           = var.healthcheck.initial_delay
+      }
+
+      liveness_probe {
+        path                    = var.healthcheck.path # Checks for status code 200 - 399
+        port                    = var.container_port
+        failure_count_threshold = var.healthcheck.unhealthy_threshold
+        interval_seconds        = var.healthcheck.interval
+        timeout                 = var.healthcheck.timeout
+        transport               = "HTTP"
+        initial_delay           = var.healthcheck.initial_delay
+      }
+
+      startup_probe {
+        port                    = var.container_port
+        path                    = var.healthcheck.path # Checks for status code 200 - 399
+        failure_count_threshold = var.healthcheck.unhealthy_threshold
+        interval_seconds        = var.healthcheck.interval
+        timeout                 = var.healthcheck.timeout
+        transport               = "HTTP"
+        initial_delay           = var.healthcheck.initial_delay
       }
 
       dynamic "env" {
@@ -72,6 +93,26 @@ resource "azurerm_container_app" "this" {
           interval_seconds        = var.healthcheck.interval
           timeout                 = var.healthcheck.timeout
           transport               = "HTTP"
+          initial_delay           = var.healthcheck.initial_delay
+        }
+        liveness_probe {
+          path                    = var.healthcheck.path # Checks for status code 200 - 399
+          port                    = 8080
+          failure_count_threshold = var.healthcheck.unhealthy_threshold
+          interval_seconds        = var.healthcheck.interval
+          timeout                 = var.healthcheck.timeout
+          transport               = "HTTP"
+          initial_delay           = var.healthcheck.initial_delay
+        }
+
+        startup_probe {
+          port                    = 8080
+          path                    = var.healthcheck.path # Checks for status code 200 - 399
+          failure_count_threshold = var.healthcheck.unhealthy_threshold
+          interval_seconds        = var.healthcheck.interval
+          timeout                 = var.healthcheck.timeout
+          transport               = "HTTP"
+          initial_delay           = var.healthcheck.initial_delay
         }
       }
     }
