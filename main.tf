@@ -46,12 +46,12 @@ resource "azurerm_container_app" "this" {
 
       startup_probe {
         port                    = var.container_port
-        path                    = var.healthcheck.path # Checks for status code 200 - 399
-        failure_count_threshold = var.healthcheck.unhealthy_threshold
-        interval_seconds        = var.healthcheck.interval
-        timeout                 = var.healthcheck.timeout
+        path                    = var.healthcheck_startup.path # Checks for status code 200 - 399
+        failure_count_threshold = var.healthcheck_startup.unhealthy_threshold
+        interval_seconds        = var.healthcheck_startup.interval
+        timeout                 = var.healthcheck_startup.timeout
         transport               = "HTTP"
-        initial_delay           = var.healthcheck.initial_delay
+        initial_delay           = var.healthcheck_startup.initial_delay
       }
 
       dynamic "env" {
