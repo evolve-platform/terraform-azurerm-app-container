@@ -87,32 +87,32 @@ resource "azurerm_container_app" "this" {
         // container but is necessary to make sure we are 'ready'
         readiness_probe {
           port                    = 8080
-          path                    = var.healthcheck.path # Checks for status code 200 - 399
+          path                    = var.healthcheck_readiness.path # Checks for status code 200 - 399
           success_count_threshold = 1
-          failure_count_threshold = var.healthcheck.unhealthy_threshold
-          interval_seconds        = var.healthcheck.interval
-          timeout                 = var.healthcheck.timeout
+          failure_count_threshold = var.healthcheck_readiness.unhealthy_threshold
+          interval_seconds        = var.healthcheck_readiness.interval
+          timeout                 = var.healthcheck_readiness.timeout
           transport               = "HTTP"
-          initial_delay           = var.healthcheck.initial_delay
+          initial_delay           = var.healthcheck_readiness.initial_delay
         }
         liveness_probe {
-          path                    = var.healthcheck.path # Checks for status code 200 - 399
+          path                    = var.healthcheck_liveness.path # Checks for status code 200 - 399
           port                    = 8080
-          failure_count_threshold = var.healthcheck.unhealthy_threshold
-          interval_seconds        = var.healthcheck.interval
-          timeout                 = var.healthcheck.timeout
+          failure_count_threshold = var.healthcheck_liveness.unhealthy_threshold
+          interval_seconds        = var.healthcheck_liveness.interval
+          timeout                 = var.healthcheck_liveness.timeout
           transport               = "HTTP"
-          initial_delay           = var.healthcheck.initial_delay
+          initial_delay           = var.healthcheck_liveness.initial_delay
         }
 
         startup_probe {
           port                    = 8080
-          path                    = var.healthcheck.path # Checks for status code 200 - 399
-          failure_count_threshold = var.healthcheck.unhealthy_threshold
-          interval_seconds        = var.healthcheck.interval
-          timeout                 = var.healthcheck.timeout
+          path                    = var.healthcheck_startup.path # Checks for status code 200 - 399
+          failure_count_threshold = var.healthcheck_startup.unhealthy_threshold
+          interval_seconds        = var.healthcheck_startup.interval
+          timeout                 = var.healthcheck_startup.timeout
           transport               = "HTTP"
-          initial_delay           = var.healthcheck.initial_delay
+          initial_delay           = var.healthcheck_startup.initial_delay
         }
       }
     }
