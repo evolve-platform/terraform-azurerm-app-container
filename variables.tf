@@ -132,3 +132,42 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "http_scale_rule" {
+  description = "HTTP scale rules to be set on the container"
+  type = object({
+    concurrent_requests = number
+  })
+  nullable = true
+  default = {
+    concurrent_requests = 50
+  }
+}
+
+
+variable "cpu_scale_rule" {
+  description = "CPU scale rules to be set on the container"
+  type = object({
+    threshold = number
+    type      = string
+  })
+  nullable = true
+  default = {
+    threshold = 50
+    type      = "Utilization"
+  }
+}
+
+variable "memory_scale_rule" {
+  description = "Memory scale rules to be set on the container"
+  type = object({
+    threshold = number
+    type      = string
+  })
+  nullable = true
+  default = {
+    threshold = 75
+    type      = "Utilization"
+  }
+}
+
