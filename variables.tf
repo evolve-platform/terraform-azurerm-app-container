@@ -111,7 +111,7 @@ variable "container_additional_ports" {
   default = []
 }
 
-variable "healthcheck_readiness" {
+variable "healthcheck" {
   type = object({
     path                = string
     unhealthy_threshold = number
