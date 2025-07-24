@@ -85,34 +85,43 @@ resource "azurerm_container_app" "this" {
         // This will hit the same healthcheck as the main container, but then
         // via the proxy. Results in duplicate healthchecks on the main
         // container but is necessary to make sure we are 'ready'
-        readiness_probe {
-          port                    = 8080
-          path                    = var.healthcheck_readiness.path # Checks for status code 200 - 399
-          success_count_threshold = 1
-          failure_count_threshold = var.healthcheck_readiness.unhealthy_threshold
-          interval_seconds        = var.healthcheck_readiness.interval
-          timeout                 = var.healthcheck_readiness.timeout
-          transport               = "HTTP"
-          initial_delay           = var.healthcheck_readiness.initial_delay
+        dynamic "readiness_probe" {
+          for_each = var.healthcheck_readiness != null ? [var.healthcheck_readiness] : []
+          content {
+            port                    = 8080
+            path                    = var.healthcheck_readiness.path # Checks for status code 200 - 399
+            success_count_threshold = 1
+            failure_count_threshold = var.healthcheck_readiness.unhealthy_threshold
+            interval_seconds        = var.healthcheck_readiness.interval
+            timeout                 = var.healthcheck_readiness.timeout
+            transport               = "HTTP"
+            initial_delay           = var.healthcheck_readiness.initial_delay
+          }
         }
-        liveness_probe {
-          path                    = var.healthcheck_liveness.path # Checks for status code 200 - 399
-          port                    = 8080
-          failure_count_threshold = var.healthcheck_liveness.unhealthy_threshold
-          interval_seconds        = var.healthcheck_liveness.interval
-          timeout                 = var.healthcheck_liveness.timeout
-          transport               = "HTTP"
-          initial_delay           = var.healthcheck_liveness.initial_delay
+        dynamic "liveness_probe" {
+          for_each = var.healthcheck_liveness != null ? [var.healthcheck_liveness] : []
+          content {
+            path                    = var.healthcheck_liveness.path # Checks for status code 200 - 399
+            port                    = 8080
+            failure_count_threshold = var.healthcheck_liveness.unhealthy_threshold
+            interval_seconds        = var.healthcheck_liveness.interval
+            timeout                 = var.healthcheck_liveness.timeout
+            transport               = "HTTP"
+            initial_delay           = var.healthcheck_liveness.initial_delay
+          }
         }
 
-        startup_probe {
-          port                    = 8080
-          path                    = var.healthcheck_startup.path # Checks for status code 200 - 399
-          failure_count_threshold = var.healthcheck_startup.unhealthy_threshold
-          interval_seconds        = var.healthcheck_startup.interval
-          timeout                 = var.healthcheck_startup.timeout
-          transport               = "HTTP"
-          initial_delay           = var.healthcheck_startup.initial_delay
+        dynamic "startup_probe" {
+          for_each = var.healthcheck_startup != null ? [var.healthcheck_startup] : []
+          content {
+            port                    = 8080
+            path                    = var.healthcheck_startup.path # Checks for status code 200 - 399
+            failure_count_threshold = var.healthcheck_startup.unhealthy_threshold
+            interval_seconds        = var.healthcheck_startup.interval
+            timeout                 = var.healthcheck_startup.timeout
+            transport               = "HTTP"
+            initial_delay           = var.healthcheck_startup.initial_delay
+          }
         }
       }
     }
