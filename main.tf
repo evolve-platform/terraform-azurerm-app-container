@@ -17,6 +17,40 @@ resource "azurerm_container_app" "this" {
     min_replicas = var.min_replicas
     max_replicas = var.max_replicas
 
+
+    dynamic "http_scale_rule" {
+      for_each = var.http_scale_rule != null ? [var.http_scale_rule] : []
+      content {
+        name                = "http-scaler"
+        concurrent_requests = var.http_scale_rule.concurrent_requests
+      }
+    }
+
+    dynamic "custom_scale_rule" {
+      for_each = var.cpu_scale_rule != null ? [var.cpu_scale_rule] : []
+      content {
+        custom_rule_type = "cpu"
+        metadata = {
+          "type" : var.cpu_scale_rule.type,
+          "value" : var.cpu_scale_rule.threshold
+        }
+        name = "cpu-scaler"
+      }
+    }
+
+
+    dynamic "custom_scale_rule" {
+      for_each = var.memory_scale_rule != null ? [var.memory_scale_rule] : []
+      content {
+        custom_rule_type = "memory"
+        metadata = {
+          "type" : var.memory_scale_rule.type,
+          "value" : var.memory_scale_rule.threshold
+        }
+        name = "memory-scaler"
+      }
+    }
+
     container {
       name   = "main"
       image  = var.image
