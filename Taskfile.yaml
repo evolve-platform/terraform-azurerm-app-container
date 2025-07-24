@@ -12,6 +12,12 @@ tasks:
     cmds:
       - terraform fmt *.tf
 
+  validate:
+    desc: "Validate terraform files"
+    cmds:
+      - terraform init --backend=false
+      - terraform validate
+
   docs:
     desc: "Generate terraform docs"
     cmds:
