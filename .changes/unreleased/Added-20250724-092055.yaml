@@ -1,3 +1,0 @@
-kind: Added
-body: Added support for scaling based on cpu and memory, as well as changing http request scaling rules
-time: 2025-07-24T09:20:55.519865+02:00
