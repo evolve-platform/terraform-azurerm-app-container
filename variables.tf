@@ -114,57 +114,40 @@ variable "container_additional_ports" {
 variable "healthcheck" {
   type = object({
     path                = string
-    unhealthy_threshold = number
-    timeout             = number
-    interval            = number
-    initial_delay       = number
+    unhealthy_threshold = optional(number, 3)
+    healthy_threshold   = optional(number, 1)
+    timeout             = optional(number, 5)
+    interval            = optional(number, 60)
+    initial_delay       = optional(number, 60)
   })
-  nullable = true
-  default = {
-    path                = "/"
-    unhealthy_threshold = 3
-    timeout             = 2
-    interval            = 10
-    initial_delay       = 60
-  }
+  nullable    = true
+  default     = null
   description = "Healthcheck Readiness configuration"
 }
 
 variable "healthcheck_liveness" {
   type = object({
     path                = string
-    unhealthy_threshold = number
-    timeout             = number
-    interval            = number
-    initial_delay       = number
+    unhealthy_threshold = optional(number, 3)
+    timeout             = optional(number, 2)
+    interval            = optional(number, 10)
+    initial_delay       = optional(number, 30)
   })
-  nullable = true
-  default = {
-    path                = "/"
-    unhealthy_threshold = 3
-    timeout             = 2
-    interval            = 10
-    initial_delay       = 30
-  }
+  nullable    = true
+  default     = null
   description = "Healthcheck Liveliness configuration"
 }
 
 variable "healthcheck_startup" {
   type = object({
     path                = string
-    unhealthy_threshold = number
-    timeout             = number
-    interval            = number
-    initial_delay       = number
+    unhealthy_threshold = optional(number, 30)
+    timeout             = optional(number, 2)
+    interval            = optional(number, 10)
+    initial_delay       = optional(number, 0)
   })
-  nullable = true
-  default = {
-    path                = "/"
-    unhealthy_threshold = 30
-    timeout             = 2
-    interval            = 10
-    initial_delay       = 0
-  }
+  nullable    = true
+  default     = null
   description = "Healthcheck startup configuration"
 }
 
@@ -177,7 +160,7 @@ variable "tags" {
 variable "http_scale_rule" {
   description = "HTTP scale rules to be set on the container"
   type = object({
-    concurrent_requests = number
+    concurrent_requests = optional(number, 50)
   })
   nullable = true
   default = {
@@ -189,8 +172,8 @@ variable "http_scale_rule" {
 variable "cpu_scale_rule" {
   description = "CPU scale rules to be set on the container"
   type = object({
-    threshold = number
-    type      = string
+    threshold = optional(number, 50)
+    type      = optional(string, "Utilization")
   })
   nullable = true
   default = {
@@ -202,8 +185,8 @@ variable "cpu_scale_rule" {
 variable "memory_scale_rule" {
   description = "Memory scale rules to be set on the container"
   type = object({
-    threshold = number
-    type      = string
+    threshold = optional(number, 75)
+    type      = optional(string, "Utilization")
   })
   nullable = true
   default = {
