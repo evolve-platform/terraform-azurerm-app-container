@@ -1,0 +1,3 @@
+kind: Fixed
+body: Made healthcheck fields optional per field
+time: 2025-07-25T08:50:55.096674783+02:00
