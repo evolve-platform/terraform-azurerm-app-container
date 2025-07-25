@@ -1,3 +1,0 @@
-kind: Fixed
-body: Changed healthcheck var to remain backwards compatible
-time: 2025-07-24T16:23:39.872336171+02:00
