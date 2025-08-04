@@ -115,9 +115,74 @@ resource "azurerm_container_app" "this" {
       }
     }
 
-    # Reverse proxy container
+    # Sidecars
     dynamic "container" {
-      for_each = var.proxy_image != "" ? [var.proxy_image] : []
+      for_each = var.sidecars
+      content {
+        name   = container.value.name
+        image  = container.value.image
+        cpu    = container.value.cpu
+        memory = container.value.memory
+
+        dynamic "readiness_probe" {
+          for_each = container.value.healthcheck != null ? [container.value.healthcheck] : []
+          content {
+            port                    = container.value.container_port
+            path                    = container.value.healthcheck.path # Checks for status code 200 - 399
+            success_count_threshold = container.value.healthcheck.healthy_threshold
+            failure_count_threshold = container.value.healthcheck.unhealthy_threshold
+            interval_seconds        = container.value.healthcheck.interval
+            timeout                 = container.value.healthcheck.timeout
+            transport               = "HTTP"
+            initial_delay           = container.value.healthcheck.initial_delay
+          }
+        }
+        dynamic "liveness_probe" {
+          for_each = container.value.healthcheck_liveness != null ? [container.value.healthcheck_liveness] : []
+          content {
+            path                    = container.value.healthcheck_liveness.path # Checks for status code 200 - 399
+            port                    = container.value.container_port
+            failure_count_threshold = container.value.healthcheck_liveness.unhealthy_threshold
+            interval_seconds        = container.value.healthcheck_liveness.interval
+            timeout                 = container.value.healthcheck_liveness.timeout
+            transport               = "HTTP"
+            initial_delay           = container.value.healthcheck_liveness.initial_delay
+          }
+        }
+
+        dynamic "startup_probe" {
+          for_each = container.value.healthcheck_startup != null ? [container.value.healthcheck_startup] : []
+          content {
+            port                    = container.value.container_port
+            path                    = container.value.healthcheck_startup.path # Checks for status code 200 - 399
+            failure_count_threshold = container.value.healthcheck_startup.unhealthy_threshold
+            interval_seconds        = container.value.healthcheck_startup.interval
+            timeout                 = container.value.healthcheck_startup.timeout
+            transport               = "HTTP"
+            initial_delay           = container.value.healthcheck_startup.initial_delay
+          }
+        }
+
+        dynamic "env" {
+          for_each = container.value.env_vars
+          content {
+            name  = env.key
+            value = env.value
+          }
+        }
+
+        dynamic "env" {
+          for_each = container.value.secrets
+          content {
+            name        = env.value.env_name
+            secret_name = env.value.secret_name
+          }
+        }
+      }
+    }
+
+    dynamic "container" {
+      for_each = var.proxy_image != null ? [var.proxy_image] : []
       content {
         name   = "reverse-proxy"
         image  = var.proxy_image
@@ -217,3 +282,4 @@ resource "azurerm_container_app" "this" {
     }
   }
 }
+
