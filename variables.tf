@@ -28,7 +28,7 @@ variable "image" {
 
 variable "proxy_image" {
   type        = string
-  nullable    = true
+  default     = ""
   description = "Version of the reverse proxy to deploy"
 }
 

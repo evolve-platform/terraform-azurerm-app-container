@@ -182,7 +182,7 @@ resource "azurerm_container_app" "this" {
     }
 
     dynamic "container" {
-      for_each = var.proxy_image != null ? [var.proxy_image] : []
+      for_each = var.proxy_image != "" ? [var.proxy_image] : []
       content {
         name   = "reverse-proxy"
         image  = var.proxy_image
