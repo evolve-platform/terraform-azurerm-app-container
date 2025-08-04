@@ -210,6 +210,7 @@ variable "sidecars" {
     healthcheck = optional(object({
       path                = string
       unhealthy_threshold = optional(number, 3)
+      healthy_threshold   = optional(number, 1)
       timeout             = optional(number, 5)
       interval            = optional(number, 60)
       initial_delay       = optional(number, 60)
