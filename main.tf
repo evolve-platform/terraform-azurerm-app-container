@@ -75,6 +75,7 @@ resource "azurerm_container_app" "this" {
         content {
           path                    = var.healthcheck_liveness.path # Checks for status code 200 - 399
           port                    = var.container_port
+          success_count_threshold = var.healthcheck_liveness.healthy_threshold
           failure_count_threshold = var.healthcheck_liveness.unhealthy_threshold
           interval_seconds        = var.healthcheck_liveness.interval
           timeout                 = var.healthcheck_liveness.timeout
@@ -88,6 +89,7 @@ resource "azurerm_container_app" "this" {
         content {
           port                    = var.container_port
           path                    = var.healthcheck_startup.path # Checks for status code 200 - 399
+          success_count_threshold = var.healthcheck_startup.healthy_threshold
           failure_count_threshold = var.healthcheck_startup.unhealthy_threshold
           interval_seconds        = var.healthcheck_startup.interval
           timeout                 = var.healthcheck_startup.timeout
