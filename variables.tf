@@ -32,6 +32,22 @@ variable "proxy_image" {
   description = "Version of the reverse proxy to deploy"
 }
 
+variable "proxy_env_vars" {
+  description = "Environment variables to be set on the reverse proxy container"
+  type        = map(string)
+  default     = {}
+}
+
+variable "proxy_secrets" {
+  description = "Secrets to be exposed on the reverse proxy container"
+  type = list(object({
+    secret_id   = string
+    secret_name = string
+    env_name    = string
+  }))
+  default = []
+}
+
 variable "identity_id" {
   description = "The identity to be used for the container registry"
   type        = string

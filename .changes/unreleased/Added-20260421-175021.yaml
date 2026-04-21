@@ -1,0 +1,3 @@
+kind: Added
+body: allow setting env and secrets on proxy image
+time: 2026-04-21T17:50:21.515727+02:00

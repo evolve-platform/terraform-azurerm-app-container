@@ -1,3 +1,9 @@
+locals {
+  container_secrets = {
+    for secret in concat(var.secrets, var.proxy_secrets) : secret.secret_name => secret
+  }
+}
+
 resource "azurerm_container_app" "this" {
   name                         = var.name
   container_app_environment_id = var.container_app_environment_id
@@ -232,13 +238,31 @@ resource "azurerm_container_app" "this" {
             initial_delay           = var.healthcheck_startup.initial_delay
           }
         }
+
+        dynamic "env" {
+          for_each = var.proxy_env_vars
+
+          content {
+            name  = env.key
+            value = env.value
+          }
+        }
+
+        dynamic "env" {
+          for_each = var.proxy_secrets
+
+          content {
+            name        = env.value.env_name
+            secret_name = env.value.secret_name
+          }
+        }
       }
     }
 
   }
 
   dynamic "secret" {
-    for_each = var.secrets
+    for_each = local.container_secrets
 
     content {
       identity            = var.identity_id
@@ -284,4 +308,3 @@ resource "azurerm_container_app" "this" {
     }
   }
 }
-
