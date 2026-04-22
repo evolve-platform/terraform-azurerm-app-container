@@ -144,7 +144,6 @@ variable "healthcheck_liveness" {
   type = object({
     path                = string
     unhealthy_threshold = optional(number, 3)
-    healthy_threshold   = optional(number, 1)
     timeout             = optional(number, 2)
     interval            = optional(number, 10)
     initial_delay       = optional(number, 30)
@@ -158,7 +157,6 @@ variable "healthcheck_startup" {
   type = object({
     path                = string
     unhealthy_threshold = optional(number, 30)
-    healthy_threshold   = optional(number, 1)
     timeout             = optional(number, 2)
     interval            = optional(number, 10)
     initial_delay       = optional(number, 0)
