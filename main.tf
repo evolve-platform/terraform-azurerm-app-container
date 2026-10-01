@@ -57,6 +57,20 @@ resource "azurerm_container_app" "this" {
       }
     }
 
+    dynamic "custom_scale_rule" {
+      for_each = var.cron_scale_rules
+      content {
+        custom_rule_type = "cron"
+        metadata = {
+          "timezone" : custom_scale_rule.value.timezone,
+          "start" : custom_scale_rule.value.start,
+          "end" : custom_scale_rule.value.end,
+          "desiredReplicas" : tostring(custom_scale_rule.value.desired_replicas)
+        }
+        name = custom_scale_rule.value.name
+      }
+    }
+
     container {
       name   = "main"
       image  = var.image

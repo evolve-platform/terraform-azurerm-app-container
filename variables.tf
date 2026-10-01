@@ -210,6 +210,26 @@ variable "memory_scale_rule" {
   }
 }
 
+# Scale-to-zero outside the windows only works when cpu_scale_rule and
+# memory_scale_rule are null; Container Apps can't scale to zero on those.
+variable "cron_scale_rules" {
+  description = "Cron (KEDA) scale rules. Inside a window the app runs at least desired_replicas; outside it falls back to min_replicas."
+  type = list(object({
+    name             = string
+    timezone         = string
+    start            = string
+    end              = string
+    desired_replicas = number
+  }))
+  nullable = false
+  default  = []
+
+  validation {
+    condition     = alltrue([for r in var.cron_scale_rules : r.desired_replicas >= 1])
+    error_message = "desired_replicas must be at least 1."
+  }
+}
+
 variable "sidecars" {
   description = "List of side containers to run alongside the main container."
   type = list(object({
